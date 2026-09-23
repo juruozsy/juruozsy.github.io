@@ -1,0 +1,19 @@
+/* 洛谷图标 */
+.custom_luogu {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('/img/luogu.ico') no-repeat center;
+  background-size: contain;
+  vertical-align: middle;
+}
+
+/* Codeforces图标 */
+.custom_codeforces {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('/img/codeforces.svg') no-repeat center;
+  background-size: contain;
+  vertical-align: middle;
+}

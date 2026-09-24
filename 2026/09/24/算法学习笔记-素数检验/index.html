@@ -1,0 +1,395 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>算法学习笔记 2.素数检验 | 山重水复疑无路，柳暗花明又一村。</title><meta name="author" content="Zsy_2008"><meta name="copyright" content="Zsy_2008"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="算法学习笔记 2.素数检验1.Fermat素性检验原理：根据费马小定理$a^{p-1}\equiv1\pmod p$其中$p$是质数，如果一个数带入费马小定理成立，那么它有可能是质数，反之则一定不是质数。  操作流程：设$n$是被检验的数，从$[2,n-1]$中抽取$a$，测试$a^{n-1}\equiv1\pmod n$是否成立，若成立，则$n\in Prime $ 注意：对于任意$a$,均存在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法学习笔记 2.素数检验">
+<meta property="og:url" content="http://example.com/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/index.html">
+<meta property="og:site_name" content="山重水复疑无路，柳暗花明又一村。">
+<meta property="og:description" content="算法学习笔记 2.素数检验1.Fermat素性检验原理：根据费马小定理$a^{p-1}\equiv1\pmod p$其中$p$是质数，如果一个数带入费马小定理成立，那么它有可能是质数，反之则一定不是质数。  操作流程：设$n$是被检验的数，从$[2,n-1]$中抽取$a$，测试$a^{n-1}\equiv1\pmod n$是否成立，若成立，则$n\in Prime $ 注意：对于任意$a$,均存在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-09-24T09:43:01.000Z">
+<meta property="article:modified_time" content="2026-09-24T10:15:52.984Z">
+<meta property="article:author" content="Zsy_2008">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="数论">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "算法学习笔记 2.素数检验",
+  "url": "http://example.com/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-09-24T09:43:01.000Z",
+  "dateModified": "2026-09-24T10:15:52.984Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Zsy_2008",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.1.260810"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        try {
+          const data = { value }
+
+          if (ttl != null) {
+            data.expiry = Date.now() + ttl * 86400000
+          }
+
+          localStorage.setItem(key, JSON.stringify(data))
+        } catch (e) {
+          console.error(e)
+        }
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '算法学习笔记 2.素数检验',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/avatar.jpg" alt="Logo"><span class="site-name">山重水复疑无路，柳暗花明又一村。</span></a><a class="nav-page-title" href="/"><span class="site-name">算法学习笔记 2.素数检验</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">算法学习笔记 2.素数检验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-09-24T09:43:01.000Z" title="发表于 2026-09-24 17:43:01">2026-09-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-24T10:15:52.984Z" title="更新于 2026-09-24 18:15:52">2026-09-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">算法学习笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%95%B0%E8%AE%BA/">数论</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="算法学习笔记-2-素数检验"><a href="#算法学习笔记-2-素数检验" class="headerlink" title="算法学习笔记 2.素数检验"></a>算法学习笔记 2.素数检验</h1><h2 id="1-Fermat素性检验"><a href="#1-Fermat素性检验" class="headerlink" title="1.Fermat素性检验"></a>1.Fermat素性检验</h2><h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>根据费马小定理$a^{p-1}\equiv1\pmod p$其中$p$是质数，如果一个数带入费马小定理成立，那么它有可能是质数，反之则一定不是质数。 </p>
+<h3 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h3><p>设$n$是被检验的数，从$[2,n-1]$中抽取$a$，测试$a^{n-1}\equiv1\pmod n$是否成立，若成立，则$n\in Prime $</p>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><h2 id="对于任意-a-均存在无数个-n-为费马伪素数（字面意思）"><a href="#对于任意-a-均存在无数个-n-为费马伪素数（字面意思）" class="headerlink" title="对于任意$a$,均存在无数个$n$为费马伪素数（字面意思） "></a>对于任意$a$,均存在无数个$n$为费马伪素数（字面意思） </h2><h2 id="2-Miller-Robin-素数检验"><a href="#2-Miller-Robin-素数检验" class="headerlink" title="2. $Miller-Robin$素数检验"></a>2. $Miller-Robin$素数检验</h2><h3 id="前置知识：二次探测定理"><a href="#前置知识：二次探测定理" class="headerlink" title="前置知识：二次探测定理"></a>前置知识：二次探测定理</h3><p>若$p\in奇素数$，那么$x^2\equiv1\pmod p$的解只有$x\equiv 1\pmod p$和$x\equiv n-1 \pmod p$  </p>
+<h3 id="具体步骤："><a href="#具体步骤：" class="headerlink" title="具体步骤："></a>具体步骤：</h3><ul>
+<li>将$n-1$分解为$u\cdot s^t， (2\nmid u)$  </li>
+<li>随机一个$a$，求$v=a^u\mod n$,再做$t$次平方</li>
+<li>若发现除了1的非平凡根，则判定$n$不是素数</li>
+<li>$t$次平方都通过后，再做费马检验</li>
+<li>再重头开始进行下次检验</li>
+</ul>
+<p>检验总次数最好大于8，但也不要过大</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>$O(k\log n)$, $k$是检验轮数</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Zsy_2008</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/">http://example.com/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">山重水复疑无路，柳暗花明又一村。</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E5%AD%A6/">数学</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E8%AE%BA/">数论</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8D%A2%E5%8D%A1%E6%96%AF%E5%AE%9A%E7%90%86/" title="算法学习笔记 1.卢卡斯定理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">算法学习笔记 1.卢卡斯定理</div></div><div class="info-2"><div class="info-item-1">算法学习笔记 1. 卢卡斯定理1.定理内容 $\binom{n}{k}\equiv \binom{\lfloor n/p\rfloor}{\lfloor k/p\rfloor}\binom{n\bmod p}{k\bmod p}\pmod p. $ 其中 $p$是质数，$k \le n$ 2.定理证明本文使用二项式定理的方式证明   （1）前置知识$\ \ (1+x) ^p\equiv (1+x^p) \pmod p$  证明:   根据二项式定理(1+x)^p = \sum _{i = 0}^{p}{\binom{p}{i}x^i}  并且$p|\binom{p}{k},(0&lt; k&lt; p)$  所以(1+x)^p \equiv \sum _{i = 0}^{p}{\binom{p}{i}x^i} \equiv \binom{p}{0}x^0+\binom{p}{p}x^p\equiv(1+x^p) \pmod p   （2） 证明令 $n = lp+r, m = sp+t$则(1+x)^n=(1 + x)^{lp+r}=((1+x)^p)^l(1+x)^r=(1+x...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8D%A2%E5%8D%A1%E6%96%AF%E5%AE%9A%E7%90%86/" title="算法学习笔记 1.卢卡斯定理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-24</div><div class="info-item-2">算法学习笔记 1.卢卡斯定理</div></div><div class="info-2"><div class="info-item-1">算法学习笔记 1. 卢卡斯定理1.定理内容 $\binom{n}{k}\equiv \binom{\lfloor n/p\rfloor}{\lfloor k/p\rfloor}\binom{n\bmod p}{k\bmod p}\pmod p. $ 其中 $p$是质数，$k \le n$ 2.定理证明本文使用二项式定理的方式证明   （1）前置知识$\ \ (1+x) ^p\equiv (1+x^p) \pmod p$  证明:   根据二项式定理(1+x)^p = \sum _{i = 0}^{p}{\binom{p}{i}x^i}  并且$p|\binom{p}{k},(0&lt; k&lt; p)$  所以(1+x)^p \equiv \sum _{i = 0}^{p}{\binom{p}{i}x^i} \equiv \binom{p}{0}x^0+\binom{p}{p}x^p\equiv(1+x^p) \pmod p   （2） 证明令 $n = lp+r, m = sp+t$则(1+x)^n=(1 + x)^{lp+r}=((1+x)^p)^l(1+x)^r=(1+x...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Zsy_2008</div><div class="author-info-description">不能逃避，这是你自己选择的命运。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/juruozsy" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/3825113609@qq.com" target="_blank" title="QQEmail"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.luogu.com.cn/user/132005" target="_blank" title="洛谷"><i class="custom_luogu" style="color: #5B8C00;"></i></a><a class="social-icon" href="https://codeforces.com/profile/zsy_2008" target="_blank" title="Codeforces"><i class="custom_codeforces" style="color: #1F8ACB;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C"><span class="toc-number">1.</span> <span class="toc-text">算法学习笔记 2.素数检验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Fermat%E7%B4%A0%E6%80%A7%E6%A3%80%E9%AA%8C"><span class="toc-number">1.1.</span> <span class="toc-text">1.Fermat素性检验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-number">1.1.2.</span> <span class="toc-text">操作流程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="toc-number">1.1.3.</span> <span class="toc-text">注意：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%BB%BB%E6%84%8F-a-%E5%9D%87%E5%AD%98%E5%9C%A8%E6%97%A0%E6%95%B0%E4%B8%AA-n-%E4%B8%BA%E8%B4%B9%E9%A9%AC%E4%BC%AA%E7%B4%A0%E6%95%B0%EF%BC%88%E5%AD%97%E9%9D%A2%E6%84%8F%E6%80%9D%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">对于任意$a$,均存在无数个$n$为费马伪素数（字面意思） </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Miller-Robin-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C"><span class="toc-number">1.3.</span> <span class="toc-text">2. $Miller-Robin$素数检验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%9A%E4%BA%8C%E6%AC%A1%E6%8E%A2%E6%B5%8B%E5%AE%9A%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">前置知识：二次探测定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="toc-number">1.3.2.</span> <span class="toc-text">具体步骤：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">1.3.3.</span> <span class="toc-text">时间复杂度</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B4%A0%E6%95%B0%E6%A3%80%E9%AA%8C/" title="算法学习笔记 2.素数检验">算法学习笔记 2.素数检验</a><time datetime="2026-09-24T09:43:01.000Z" title="发表于 2026-09-24 17:43:01">2026-09-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/24/%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%8D%A2%E5%8D%A1%E6%96%AF%E5%AE%9A%E7%90%86/" title="算法学习笔记 1.卢卡斯定理">算法学习笔记 1.卢卡斯定理</a><time datetime="2026-09-23T23:14:00.000Z" title="发表于 2026-09-24 07:14:00">2026-09-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/23/page/" title="page">page</a><time datetime="2026-09-22T16:58:42.000Z" title="发表于 2026-09-23 00:58:42">2026-09-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/23/Welcome/" title="Welcome!">Welcome!</a><time datetime="2026-09-22T16:51:15.000Z" title="发表于 2026-09-23 00:51:15">2026-09-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/22/hello-world/" title="Hello World">Hello World</a><time datetime="2026-09-22T14:22:09.087Z" title="发表于 2026-09-22 22:22:09">2026-09-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Zsy_2008</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.1.260810</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.1.260810"></script><script src="/js/main.js?v=5.7.1.260810"></script><div class="js-pjax"><script>(() => {
+  const changeScriptToMath = article => {
+    article.querySelectorAll('script[type^="math/tex"]').forEach(el => {
+      const display = /mode=display/.test(el.type)
+      const node = document.createElement(display ? 'div' : 'span')
+      node.textContent = display
+        ? `$$${el.textContent}$$`
+        : `$${el.textContent}$`
+      el.parentNode.replaceChild(node, el)
+    })
+  }
+
+  const loadMathjax = () => {
+    const article = document.getElementById('article-container')
+    if (!article || article.querySelector('.hbe-container')) return
+    changeScriptToMath(article)
+
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem',
+            'ui/lazy'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          lazyMargin: '200px',
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.typesetClear()
+      MathJax.typesetPromise([ article ])
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  if (window.pjax) loadMathjax()
+  else if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadMathjax)
+  else loadMathjax()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'juruozsy/juruozsy.github.io',
+      'data-repo-id': 'R_kgDOUl5Nuw',
+      'data-category-id': 'DIC_kwDOUl5Nu84DGM8a',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script><script>
+var __runMeting = function () {
+  if (window.aplayers) {
+    try {
+      window.aplayers.forEach(function (p) {
+        if (!p.options.fixed) p.destroy();
+      });
+    } catch (e) {}
+  }
+  if (typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length) {
+    loadMeting();
+  }
+};
+window.addEventListener('load', __runMeting);
+</script>
+<canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
